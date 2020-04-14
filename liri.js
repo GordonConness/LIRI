@@ -1,5 +1,4 @@
-
-require("dotenv").config();
+require("spotify").config();
 
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
@@ -7,15 +6,15 @@ var request = require("request");
 var fs = require("fs");
 var spotify = new Spotify(keys.spotify);
 
-var callSpotifyAPI = function(songName) {
+var spotifyAPI = function(songName) {
     if (songName === undefined) {
-      songName = "1999";
+      songName = "";
     }
     spotify.search(
       {
         type: "track",
         query: songName,
-        limit: 15
+        limit: 10
       },
       function(err, data) {
         if (err) {
@@ -35,3 +34,4 @@ var callSpotifyAPI = function(songName) {
           console.log("");
         }
       }
+
