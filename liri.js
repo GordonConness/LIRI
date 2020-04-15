@@ -43,7 +43,7 @@ var spotifyAPI = function(songName) {
             return console.log(error);
         }
         var random = data.split(",");
-        spotifyThis(random[1]);
+        spotifyAPI(random[1]);
     });
 
 }
