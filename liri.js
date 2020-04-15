@@ -1,4 +1,4 @@
-require("spotify").config();
+require("dotenv").config();
 
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
@@ -34,4 +34,17 @@ var spotifyAPI = function(songName) {
           console.log("");
         }
       }
+    );
+  };
 
+  function fsRead() {
+    fs.readFile("random.txt", "utf-8", function (err, data) {
+        if (err) {
+            return console.log(error);
+        }
+        var random = data.split(",");
+        spotifyThis(random[1]);
+    });
+
+}
+    
