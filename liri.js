@@ -2,9 +2,34 @@ require("dotenv").config();
 
 var Spotify = require("node-spotify-api");
 var keys = require("./keys");
-var request = require("request");
 var fs = require("fs");
 var spotify = new Spotify(keys.spotify);
+var axios = require("axios");
+
+switch (choice) {
+    case "concert-this":
+        concert(input);
+        break;
+    case "spotify-this":
+        if (input) {
+            spotifyThis(input);
+        } else {
+            spotifyThis("");
+        }
+}
+
+
+function concert(artist) {
+    axios.get("https://rest.bandsintown.com/artists/" + artist + "/events?app_id=codingbootcamp").then(function (response) {
+        var songData = response.data[0];
+        console.log(`
+        \nVenue Name: ${songData.venue.name}
+        \nVenue Location: ${songData.venue.city}, ${songData.venue.region}
+        \nDate of Event: ${ moment(response.data[0].datetime).format("MM/DD/YYYY")}
+        `);
+
+    })
+}
 
 var spotifyAPI = function(songName) {
     if (songName === undefined) {
@@ -15,11 +40,14 @@ var spotifyAPI = function(songName) {
         type: "track",
         query: songName,
         limit: 10
-      },
-      function(err, data) {
-        if (err) {
-          console.log("Error occurred: " + err);
-          return;
+        .request("https://api.spotify.com/v1/tracks/")
+        .then(function(data) {
+            console.log(data); 
+        },
+        function(err, data) {
+            if (err) {
+              console.log("Error occurred: " + err);
+              return;
         }
         var songs = data.tracks.items;
         for (var i = 0; i < songs.length; i++) {
@@ -33,18 +61,22 @@ var spotifyAPI = function(songName) {
           console.log("Preview song: " + songs[i].preview_url);
           console.log("");
         }
-      }
-    );
-  };
-
-  function fsRead() {
-    fs.readFile("random.txt", "utf-8", function (err, data) {
-        if (err) {
-            return console.log(error);
         }
-        var random = data.split(",");
-        spotifyAPI(random[1]);
-    });
+        )
+        
+    }
+    );
 
-}
+    function fsRead() {
+        fs.readFile("random.txt", "utf-8", function (err, data) {
+            if (err) {
+                return console.log(error);
+            }
+            var random = data.split(",");
+            spotifyAPI(random[1]);
+        });
     
+    }
+
+
+};

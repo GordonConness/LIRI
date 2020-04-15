@@ -1,4 +1,4 @@
 exports.spotify = {
-    id: process.env.spotify_ID,
-    secret:process.env.spotify_secret
+    id: process.env.SPOTIFY_ID,
+    secret:process.env.SPOTIFY_SECRET
 };
